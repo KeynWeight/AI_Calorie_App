@@ -9,8 +9,8 @@ RUN npm ci
 COPY food-data-central-mcp-server/ ./
 RUN npm run build
 
-# Python stage
-FROM python:3.13-slim
+# Python stage - use full Python image instead of slim
+FROM python:3.13
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -22,18 +22,8 @@ ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
 WORKDIR /app
 
-# Install system dependencies needed for Python packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    build-essential \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender-dev \
-    libgomp1 \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install only curl (full Python image has build tools)
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Install pip and upgrade setuptools first
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel

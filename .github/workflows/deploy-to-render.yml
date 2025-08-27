@@ -1,0 +1,31 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch: # Allow manual deployment
+
+jobs:
+  # First run our CI checks
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  # Deploy only if CI passes
+  deploy:
+    needs: ci
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to Render
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        wait-for-success: true
+        
+    - name: Deployment Status
+      run: |
+        echo "🚀 Deployment triggered successfully!"
+        echo "📱 Your app will be available at: https://your-app-name.onrender.com"
+        echo "⏱️ Deployment usually takes 2-3 minutes"

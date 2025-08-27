@@ -1,0 +1,132 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "calorie-app"
+version = "0.1.0"
+description = "VLM-powered nutrition analysis with human validation and USDA integration"
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [
+    {name = "Calorie App Team"}
+]
+dependencies = [
+    "aiofiles>=23.0.0",
+    "dotenv>=0.9.9",
+    "ipykernel>=6.30.1",
+    "langchain>=0.3.27",
+    "langchain-openai>=0.3.30",
+    "langchain-mcp-adapters>=0.1.0",
+    "langgraph>=0.6.6",
+    "opencv-python>=4.12.0.88",
+    "pillow>=10.0.0",
+    "polars>=1.32.3",
+    "pydantic>=2.11.7",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "scikit-learn>=1.7.1",
+    "ultralytics>=8.3.180",
+    # Streamlit app dependencies
+    "streamlit>=1.28.0",
+    "plotly>=5.15.0",
+    "pandas>=2.0.0",
+    "reportlab>=4.0.0",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "safety>=2.3.0",
+    "bandit>=1.7.5",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+src_paths = ["src", "tests"]
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "streamlit.*",
+    "plotly.*",
+    "cv2.*",
+    "ultralytics.*",
+    "langchain.*",
+    "polars.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+    "--durations=10",
+    "--color=yes",
+]
+markers = [
+    "unit: Fast unit tests with no external dependencies",
+    "integration: Integration tests with mocked external services",
+    "e2e: End-to-end tests (requires running services)",
+    "slow: Tests that take longer than 30 seconds",
+    "requires_api: Tests that need real API keys",
+    "security: Security-related tests",
+    "cache: Tests related to caching functionality",
+    "vision: Tests for vision/image processing",
+    "nutrition: Tests for nutrition calculation logic",
+    "workflow: Tests for workflow orchestration",
+    "config: Configuration and environment tests",
+    "ui: User interface component tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+    "ignore::pytest.PytestUnraisableExceptionWarning",
+]

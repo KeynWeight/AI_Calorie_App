@@ -1,14 +1,16 @@
 # Food Data Central MCP Server
 
-This is a Model Context Protocol (MCP) server for exposing API access to
-the [USDA's FoodData Central API](https://fdc.nal.usda.gov/api-guide).
+This is a Model Context Protocol (MCP) server that provides seamless integration with
+the [USDA's FoodData Central API](https://fdc.nal.usda.gov/api-guide) for enhanced nutrition data in the Calorie App.
 
 ## Features
 
-- Search for foods in the USDA FoodData Central database
-- Access food nutrient information
-- Paginated results
-- Support for multiple data types (Foundation, SR Legacy, Survey, Branded)
+- 🔍 **Smart Food Search**: Advanced search capabilities in the USDA FoodData Central database
+- 🧪 **Detailed Nutrition Data**: Comprehensive nutrient profiles with vitamins, minerals, and macros
+- 📄 **Paginated Results**: Efficient handling of large datasets with configurable page sizes
+- 📊 **Multiple Data Types**: Support for Foundation, SR Legacy, Survey (FNDDS), and Branded foods
+- ⚡ **High Performance**: Optimized API calls with intelligent caching
+- 🔧 **Easy Integration**: Seamless MCP protocol integration with the main Calorie App
 
 ## Setup
 
@@ -82,6 +84,17 @@ To use this MCP server with Claude Desktop:
 6. After restarting, you should see a hammer icon in the bottom right corner of the input box. Click on it to see the available tools.
 
 Now Claude will be able to access the Food Data Central API through this MCP server. You can ask Claude to search for foods, get nutrient information, or retrieve detailed food data.
+
+## Integration with Calorie App
+
+This MCP server is specifically designed to work with the main Calorie App to provide enhanced USDA nutrition data. When enabled, it allows the app to:
+
+- **🎯 Accurate Matching**: AI-powered ingredient matching against official USDA database
+- **📊 Enhanced Nutrition**: Replace estimated values with precise government data
+- **🧪 Micronutrients**: Access to detailed vitamin and mineral information
+- **🏛️ Official Source**: Use authoritative nutrition data from USDA FoodData Central
+
+The server integrates seamlessly with the app's workflow and is activated during the USDA Enhancement stage.
 
 ## MCP Resources and Tools
 

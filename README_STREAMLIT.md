@@ -207,9 +207,10 @@ cd ..
 
 #### 📈 System Monitoring
 - **🔌 API Status**: Real-time connection monitoring
-- **🏛️ USDA Availability**: Database connection status
-- **⚡ Current Stage**: Active processing step
+- **🏛️ USDA Availability**: MCP server and database status
+- **⚡ Current Stage**: Active processing step tracker
 - **💾 Cache Stats**: Hit rates and storage usage
+- **⏱️ Performance**: Processing time and response metrics
 
 ### 🔧 Advanced Options
 
@@ -341,9 +342,10 @@ graph TB
 ### 🚀 Performance Optimization
 
 **💾 Smart Caching System:**
-- API response caching (reduces costs)
+- API response caching (reduces costs and latency)
 - Image processing cache (faster re-analysis)
 - Model result persistence (offline viewing)
+- Session state management (workflow continuity)
 - Automatic cache cleanup (storage management)
 
 **⚡ Efficient Processing:**

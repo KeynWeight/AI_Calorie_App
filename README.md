@@ -193,13 +193,17 @@ CACHE_ENABLED=true
 # Run complete test suite
 uv run pytest
 
+# Run with Python script (alternative method)
+uv run python run_tests.py
+
 # Generate coverage report
 uv run pytest --cov=calorie_app --cov-report=html
 
 # Run specific test categories
 uv run pytest -m unit          # Unit tests only
 uv run pytest -m integration   # Integration tests only
-uv run pytest -v              # Verbose output
+uv run pytest -m e2e           # End-to-end tests
+uv run pytest -v               # Verbose output
 ```
 
 ### ✨ Code Quality & Formatting
@@ -246,7 +250,7 @@ The application follows **clean architecture principles** with clear separation 
 ### 📊 Data Flow
 
 ```
-📏 Image Upload → 🤖 Vision AI → ✋ Human Review → ✨ USDA Enhancement → 📊 Results
+📤 Image Upload → 🤖 AI Analysis → ✅ Human Review → ✏️ Modify → ✨ USDA Enhancement → 📊 Results
 ```
 
 ### 🔌 Integration Points
@@ -289,7 +293,9 @@ The application follows **clean architecture principles** with clear separation 
 docker build -t calorie-app .
 
 # Run with environment variables
-docker run -p 8501:8501 -e OPENROUTER_API_KEY=your_key calorie-app
+docker run -p 8501:8501 -e OPENROUTER_API_KEY=your_key -e USDA_API_KEY=your_usda_key calorie-app
+
+# Access at http://localhost:8501
 ```
 
 ## 🎆 Contributing
@@ -356,6 +362,6 @@ cd ..
 
 **🍽️ Ready to analyze your food? Get started now! ✨**
 
-[View Demo](https://your-demo-link.streamlit.app) • [Report Bug](https://github.com/yourusername/calorie_app/issues) • [Request Feature](https://github.com/yourusername/calorie_app/issues)
+[View Demo](https://ai-calorie-app-agvf.onrender.com/)
 
 </div>

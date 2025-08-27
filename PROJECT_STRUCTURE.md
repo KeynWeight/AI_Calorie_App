@@ -42,7 +42,7 @@ python main.py
 
 The following files were moved to the `archive/` directory:
 - **Duplicate main files**: main_1.py, main_2.py, main_3.py, main_4.py
-- **Recovery scripts**: comprehensive_recovery.py, recover_*.* 
+- **Recovery scripts**: comprehensive_recovery.py, recover_*.*
 - **Duplicate components**: *_1.py, *_2.py variations
 - **Temporary files**: blob files, recovery logs
 - **Duplicate directories**: Root-level models/, services/, etc.
@@ -52,7 +52,7 @@ The following files were moved to the `archive/` directory:
 
 - **✅ Application Structure**: Properly organized
 - **✅ Dependencies**: pyproject.toml configured
-- **✅ Import Tests**: All modules import successfully  
+- **✅ Import Tests**: All modules import successfully
 - **✅ Streamlit App**: Starts and runs properly
 - **✅ CLI Example**: main.py imports and initializes correctly
 

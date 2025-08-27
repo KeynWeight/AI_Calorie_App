@@ -1,0 +1,41 @@
+repos:
+  - repo: local
+    hooks:
+      # Ruff linting and import sorting only
+      - id: ruff-check
+        name: ruff-check
+        entry: uv run ruff check --fix
+        language: system
+        files: \.py$
+        require_serial: true
+
+      # Run fast unit tests
+      - id: unit-tests
+        name: unit-tests
+        entry: uv run python run_tests.py --ci
+        language: system
+        pass_filenames: false
+        always_run: true
+        require_serial: true
+
+  # Additional generic hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      # Prevent large files
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+
+      # Check file formats
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+
+      # Prevent common mistakes
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+
+      # Security checks
+      - id: detect-private-key

@@ -22,8 +22,12 @@ ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
 WORKDIR /app
 
-# Install only curl (full Python image has build tools)
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# Install curl and Node.js (needed for MCP server runtime)
+RUN apt-get update && apt-get install -y \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install pip and upgrade setuptools first
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel

@@ -33,7 +33,7 @@ python -m pytest --tb=no -q --durations=5
 # Cache-related tests
 python -m pytest -m cache
 
-# Nutrition-related tests  
+# Nutrition-related tests
 python -m pytest -m nutrition
 
 # Vision/image processing tests
@@ -63,18 +63,18 @@ Tests are organized with markers for easy filtering:
 
 ## Why These Tests Are Perfect for CI/CD
 
-✅ **Lightning Fast** - All 71 tests complete in under 1 second  
-✅ **Zero External Dependencies** - No API calls, no network requests  
-✅ **No Costs** - Completely free to run in any CI/CD pipeline  
-✅ **Comprehensive Coverage** - Tests all critical business logic  
-✅ **Isolated & Reliable** - Each test is independent  
-✅ **Error Path Coverage** - Tests failure scenarios and edge cases  
+✅ **Lightning Fast** - All 71 tests complete in under 1 second
+✅ **Zero External Dependencies** - No API calls, no network requests
+✅ **No Costs** - Completely free to run in any CI/CD pipeline
+✅ **Comprehensive Coverage** - Tests all critical business logic
+✅ **Isolated & Reliable** - Each test is independent
+✅ **Error Path Coverage** - Tests failure scenarios and edge cases
 
 ## What These Tests Cover
 
 ### Core Business Logic (Most Important!)
 1. **Cache Performance** - Ensures fast response times
-2. **Image Processing** - File handling and validation security  
+2. **Image Processing** - File handling and validation security
 3. **Nutrition Calculations** - Your app's core math logic
 4. **Data Models** - Prevents malformed data reaching production
 5. **Input Validation** - Security-critical data sanitization
@@ -105,7 +105,7 @@ jobs:
 # Run before every commit
 python -m pytest
 
-# Quick check while developing  
+# Quick check while developing
 python -m pytest --tb=no -q
 ```
 
@@ -114,7 +114,7 @@ python -m pytest --tb=no -q
 Your test suite is **production-ready** because it:
 
 - **Catches Regressions** - Business logic bugs are caught immediately
-- **Fast Feedback Loop** - Developers get instant results  
+- **Fast Feedback Loop** - Developers get instant results
 - **Cost Effective** - Zero API costs in CI/CD
 - **Reliable** - No flaky network-dependent tests
 - **Maintainable** - Simple, focused unit tests

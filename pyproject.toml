@@ -130,3 +130,8 @@ filterwarnings = [
     "ignore::UserWarning",
     "ignore::pytest.PytestUnraisableExceptionWarning",
 ]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+]

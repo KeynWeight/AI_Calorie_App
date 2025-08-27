@@ -28,16 +28,15 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 # Install pip and upgrade setuptools first
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Copy Python requirements and install with verbose output
-COPY pyproject.toml .
-RUN pip install --no-cache-dir --verbose . || (echo "Install failed, checking logs..." && pip install --no-cache-dir --verbose . 2>&1)
+# Copy application code first (needed for pyproject.toml to find src/)
+COPY . .
 
-# Copy built MCP server from node stage
+# Copy built MCP server from node stage (overwrite the copied version)
 COPY --from=node-builder /app/food-data-central-mcp-server/dist ./food-data-central-mcp-server/dist
 COPY --from=node-builder /app/food-data-central-mcp-server/package.json ./food-data-central-mcp-server/
 
-# Copy application code
-COPY . .
+# Install Python package after copying source code
+RUN pip install --no-cache-dir --verbose .
 
 # Create directories
 RUN mkdir -p temp_uploads .cache .llm_cache logs

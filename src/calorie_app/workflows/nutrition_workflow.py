@@ -1,18 +1,17 @@
 # workflows/nutrition_workflow.py
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 import asyncio
 import logging
 from pathlib import Path
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
-from langchain_core.tools import BaseTool
 
 from calorie_app.models.nutrition import WorkflowState, AnalysisState, UserModification
 from calorie_app.services.vision_service import VisionService
 from calorie_app.services.nutrition_service import NutritionService
 from calorie_app.services.formatting_service import FormattingService
 from calorie_app.utils.config import ModelDefaults
-from calorie_app.utils.logging_config import log_workflow_step, log_api_call
+from calorie_app.utils.logging_config import log_workflow_step
 
 logger = logging.getLogger(__name__)
 

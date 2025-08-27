@@ -1,6 +1,5 @@
 # streamlit_components/image_uploader.py
 import streamlit as st
-from pathlib import Path
 import os
 
 def render_image_uploader():
@@ -24,7 +23,7 @@ def render_image_uploader():
         # Display uploaded image
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            st.image(uploaded_file, caption=f"Uploaded: {uploaded_file.name}", use_container_width=True)
+            st.image(uploaded_file, caption=f"Uploaded: {uploaded_file.name}", width="stretch")
             
             # Image info
             st.write(f"**File size:** {uploaded_file.size / 1024:.1f} KB")
@@ -42,7 +41,7 @@ def render_image_preview(image_path: str):
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.image(image_path, caption="Image being analyzed", use_container_width=True)
+        st.image(image_path, caption="Image being analyzed", width="stretch")
     
     with col2:
         # Image metadata
@@ -59,7 +58,7 @@ def render_image_preview(image_path: str):
             file_size = os.path.getsize(image_path)
             st.write(f"• File size: {file_size / 1024:.1f} KB")
             
-        except Exception as e:
+        except Exception:
             st.write("Could not load image metadata")
 
 def validate_image(uploaded_file):

@@ -1,6 +1,5 @@
 # utils/cache.py
 import hashlib
-import json
 import pickle
 from functools import wraps
 from pathlib import Path

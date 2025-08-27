@@ -1,10 +1,9 @@
 # services/nutrition_service.py
-import asyncio
 from typing import List, Dict, Optional
 import logging
 
 from calorie_app.models.nutrition import DishNutrition, Ingredient, UserModification, ValidationResult
-from calorie_app.services.mcp_nutrition_service import MCPNutritionService, MCPNutritionManager
+from calorie_app.services.mcp_nutrition_service import MCPNutritionManager
 from calorie_app.services.llm_nutrition_estimator import LLMNutritionEstimator
 from calorie_app.utils.config import ModelDefaults
 
@@ -234,7 +233,7 @@ class NutritionService:
             sodium_change = new_sodium - old_sodium
             
             # Log comprehensive comparison
-            logger.info(f"[NUTRITION COMPARISON] Original vs Modified Dish:")
+            logger.info("[NUTRITION COMPARISON] Original vs Modified Dish:")
             logger.info(f"[NUTRITION COMPARISON]   Dish Name: '{original_analysis.dish_name}' -> '{modified.dish_name}'")
             logger.info(f"[NUTRITION COMPARISON]   Ingredients: {len(original_analysis.ingredients)} -> {len(modified.ingredients)} items")
             logger.info(f"[NUTRITION COMPARISON]   Calories: {old_calories} -> {new_calories} ({calorie_change:+d})")
@@ -544,23 +543,9 @@ class NutritionService:
         
         logger.info(f"AI Agent: Starting BATCH ingredient matching for {len(ingredients)} ingredients")
         logger.info(f"Dish context: {dish_context}")
-        logger.info(f"Agent will batch process ingredients to save LLM requests")
+        logger.info("Agent will batch process ingredients to save LLM requests")
         
         # Prepare batch input for agent
-        ingredient_names = [ing.ingredient for ing in ingredients]
-        batch_query = f"""
-Dish: {dish_context}
-Ingredients to match: {', '.join(ingredient_names)}
-
-Find the best USDA database matches for ALL ingredients in this dish. 
-Process them together for context and efficiency.
-Return results in this format for each ingredient:
-
-INGREDIENT_BATCH_RESULTS:
-1. {ingredient_names[0]} -> MATCH: [food_id]|[description]|[confidence] OR NO_MATCH
-2. {ingredient_names[1]} -> MATCH: [food_id]|[description]|[confidence] OR NO_MATCH
-... (continue for all ingredients)
-"""
         
         try:
             logger.info("AI Agent: Processing all ingredients in single batch request")
@@ -573,39 +558,6 @@ INGREDIENT_BATCH_RESULTS:
                 return await self.match_ingredients_with_usda_individual(ingredients, dish_context)
             else:
                 # Fallback to individual processing
-                return await self.match_ingredients_with_usda_individual(ingredients, dish_context)
-            
-            if batch_result:
-                logger.info("AI Agent: Batch processing successful, parsing results")
-                enhanced_ingredients = []
-                successful_matches = 0
-                
-                # Parse batch results
-                batch_matches = self._parse_batch_agent_result(batch_result, ingredient_names)
-                
-                for i, ingredient in enumerate(ingredients):
-                    ingredient_name = ingredient.ingredient
-                    usda_match = batch_matches.get(ingredient_name)
-                    
-                    if usda_match and usda_match != "NO_MATCH":
-                        # Process the match like individual processing
-                        enhanced_ingredient = await self._process_usda_match(ingredient, usda_match)
-                        if enhanced_ingredient:
-                            enhanced_ingredients.append(enhanced_ingredient)
-                            successful_matches += 1
-                            logger.info(f"Batch processed: {ingredient_name} -> {usda_match.get('description', '')[:50]}...")
-                        else:
-                            enhanced_ingredients.append(ingredient)
-                    else:
-                        logger.info(f"Batch result: No USDA match for {ingredient_name}")
-                        enhanced_ingredients.append(ingredient)
-                
-                logger.info(f"AI Agent: Batch matching complete - {successful_matches}/{len(ingredients)} ingredients enhanced")
-                logger.info(f"Batch processing saved approximately {len(ingredients)-1} LLM requests!")
-                
-                return enhanced_ingredients
-            else:
-                logger.warning("AI Agent batch processing failed, falling back to individual processing")
                 return await self.match_ingredients_with_usda_individual(ingredients, dish_context)
                 
         except Exception as e:
@@ -1000,7 +952,7 @@ Return valid JSON only.
             agent_result = await self.mcp_service.agent.find_batch_matches(matching_prompt)
             
             if agent_result:
-                logger.info(f"[AGENT] Batch agent returned result, parsing matches")
+                logger.info("[AGENT] Batch agent returned result, parsing matches")
                 return await self._parse_agent_matching_result(
                     agent_result, ingredients, usda_id_lookup
                 )
@@ -1086,7 +1038,7 @@ Return valid JSON only.
                                 enhanced_ingredient = enhanced
                                 logger.info(f"[AGENT PARSE] SUCCESS: {ingredient_name} -> {description} (ID: {fdc_id})")
                             else:
-                                logger.warning(f"[AGENT PARSE] Failed to enhance ingredient with USDA data")
+                                logger.warning("[AGENT PARSE] Failed to enhance ingredient with USDA data")
                         else:
                             logger.warning(f"[AGENT PARSE] USDA ID {fdc_id} not found in lookup table")
                             logger.debug(f"[AGENT PARSE] Available IDs: {list(usda_id_lookup.keys())[:5]}...")

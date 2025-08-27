@@ -1,7 +1,6 @@
 # utils/logging_config.py
 import logging
-import os
-from typing import Dict, Optional, Any
+from typing import Optional
 from datetime import datetime
 from pathlib import Path
 

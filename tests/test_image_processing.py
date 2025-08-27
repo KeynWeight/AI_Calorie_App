@@ -2,8 +2,7 @@
 import pytest
 import tempfile
 import os
-from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from calorie_app.utils.image_processing import ImageProcessor
 
 @pytest.mark.unit
@@ -32,12 +31,12 @@ class TestImageProcessor:
     def test_validate_image_valid_file(self):
         """Test validation of valid image file."""
         image_path = self.create_test_image()
-        assert self.processor.validate_image(image_path) == True
+        assert self.processor.validate_image(image_path)
     
     def test_validate_image_nonexistent_file(self):
         """Test validation of non-existent file."""
         fake_path = os.path.join(self.temp_dir, 'nonexistent.jpg')
-        assert self.processor.validate_image(fake_path) == False
+        assert not self.processor.validate_image(fake_path)
     
     def test_validate_image_invalid_format(self):
         """Test validation of invalid image format."""
@@ -46,7 +45,7 @@ class TestImageProcessor:
         with open(fake_image, 'w') as f:
             f.write('This is not an image')
         
-        assert self.processor.validate_image(fake_image) == False
+        assert not self.processor.validate_image(fake_image)
     
     def test_validate_image_too_large(self):
         """Test validation of image that's too large."""
@@ -102,7 +101,7 @@ class TestImageProcessor:
         
         for fmt in formats:
             image_path = self.create_test_image(format=fmt)
-            assert self.processor.validate_image(image_path) == True
+            assert self.processor.validate_image(image_path)
             
             encoded = self.processor.encode_image(image_path)
             assert encoded is not None

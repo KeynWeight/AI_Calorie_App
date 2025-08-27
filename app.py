@@ -3,16 +3,12 @@ import streamlit as st
 import os
 import uuid
 import time
-from pathlib import Path
-from dotenv import load_dotenv
 import logging
-
-# Load environment variables
-load_dotenv()
+from dotenv import load_dotenv
 
 # Import our existing workflow
 from calorie_app.workflows.nutrition_workflow import NutritionWorkflow
-from calorie_app.models.nutrition import UserModification, AnalysisState
+from calorie_app.models.nutrition import UserModification
 from calorie_app.utils.logging_config import standardized_logger
 
 # Import Streamlit components (we'll create these)
@@ -23,6 +19,9 @@ from streamlit_components.modification_ui import render_modification_interface
 from streamlit_components.usda_enhancement import render_usda_interface
 from streamlit_components.results_dashboard import render_results_dashboard
 from streamlit_components.sidebar_config import render_sidebar_config
+
+# Load environment variables
+load_dotenv()
 
 # Configure page
 st.set_page_config(
@@ -182,7 +181,7 @@ def render_upload_stage():
         st.session_state.uploaded_image_name = uploaded_file.name
         
         # Show analyze button
-        if st.button("🚀 Analyze Image", type="primary", use_container_width=True):
+        if st.button("🚀 Analyze Image", type="primary", width="stretch"):
             st.session_state.analysis_stage = 'analyzing'
             st.rerun()
 
@@ -260,17 +259,17 @@ def render_validating_stage():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("✅ Approve Analysis", type="primary", use_container_width=True):
+        if st.button("✅ Approve Analysis", type="primary", width="stretch"):
             # Submit validation without modifications
             submit_validation(approved=True, modifications=None)
     
     with col2:
-        if st.button("✏️ Modify Analysis", type="secondary", use_container_width=True):
+        if st.button("✏️ Modify Analysis", type="secondary", width="stretch"):
             st.session_state.analysis_stage = 'modifying'
             st.rerun()
     
     with col3:
-        if st.button("❌ Reject & Restart", use_container_width=True):
+        if st.button("❌ Reject & Restart", width="stretch"):
             reset_analysis()
             st.rerun()
 
@@ -285,11 +284,11 @@ def render_modification_stage():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("💾 Apply Changes", type="primary", use_container_width=True):
+        if st.button("💾 Apply Changes", type="primary", width="stretch"):
             submit_validation(approved=True, modifications=modifications)
     
     with col2:
-        if st.button("↩️ Back to Review", use_container_width=True):
+        if st.button("↩️ Back to Review", width="stretch"):
             st.session_state.analysis_stage = 'validating'
             st.rerun()
 
@@ -346,7 +345,7 @@ def render_enhancing_stage():
             st.session_state.usda_matches = usda_matches
             st.session_state.natural_response = natural_response
             
-            print(f"\n=== USDA ENHANCEMENT COMPLETE ===")
+            print("\n=== USDA ENHANCEMENT COMPLETE ===")
             print(f"Enhanced analysis: {enhanced_analysis is not None}")
             print(f"USDA matches: {usda_matches}")
             print(f"Natural response: {natural_response is not None}")
@@ -354,7 +353,7 @@ def render_enhancing_stage():
                 print(f"Enhanced ingredients count: {len(enhanced_analysis.ingredients)}")
                 for i, ing in enumerate(enhanced_analysis.ingredients):
                     print(f"  {i+1}. {ing.ingredient}: {ing.calories}cal, {ing.protein}g protein, {ing.carbohydrates}g carbs, {ing.fat}g fat")
-            print(f"=== END ENHANCEMENT DATA ===\n")
+            print("=== END ENHANCEMENT DATA ===\n")
             
             status_text.text("✅ Enhancement complete!")
             progress_bar.progress(100)
@@ -397,12 +396,12 @@ def render_complete_stage():
     original_analysis = st.session_state.get('original_analysis')
     usda_matches = st.session_state.get('usda_matches', 0)
     
-    print(f"\n=== RENDER COMPLETE STAGE ===")
+    print("\n=== RENDER COMPLETE STAGE ===")
     print(f"Enhanced analysis: {enhanced_analysis is not None}")
     print(f"Final analysis: {final_analysis is not None}")
     print(f"Original analysis: {original_analysis is not None}")
     print(f"USDA matches: {usda_matches}")
-    print(f"=== END RENDER INFO ===\n")
+    print("=== END RENDER INFO ===\n")
     
     display_analysis = (enhanced_analysis or final_analysis or original_analysis)
     

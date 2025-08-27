@@ -45,7 +45,7 @@ def render_modification_interface(analysis) -> Optional[UserModification]:
             with col2:
                 # Weight modification
                 new_weight = st.number_input(
-                    f"Weight (g)",
+                    "Weight (g)",
                     min_value=0.0,
                     value=float(ingredient.weight),
                     step=5.0,
@@ -68,7 +68,7 @@ def render_modification_interface(analysis) -> Optional[UserModification]:
             
             with col4:
                 # Remove option
-                if st.checkbox(f"Remove", key=f"remove_{i}"):
+                if st.checkbox("Remove", key=f"remove_{i}"):
                     ingredients_to_remove.append(ingredient.ingredient)
                     st.warning("Will remove")
         
@@ -120,7 +120,7 @@ def render_modification_interface(analysis) -> Optional[UserModification]:
                     weight_key = f"new_weight_{new_ing}"
                     current_weight = st.session_state.new_ingredient_weights.get(new_ing, 100.0)
                     new_weight = st.number_input(
-                        f"Weight (g)",
+                        "Weight (g)",
                         min_value=1.0,
                         max_value=1000.0,
                         value=float(current_weight),
@@ -265,7 +265,6 @@ def estimate_modification_impact(modifications: Dict, original_analysis):
     
     # Display impact
     if estimated_calorie_change != 0:
-        delta_color = "green" if estimated_calorie_change > 0 else "red"
         st.metric(
             "Estimated Calorie Change",
             f"{estimated_calorie_change:+.0f}",

@@ -1,8 +1,6 @@
 # services/vision_service.py
-import base64
 import json
 import re
-from pathlib import Path
 from typing import Optional
 import logging
 
@@ -128,11 +126,11 @@ Return the analysis in this EXACT JSON format:"""
                 import json
                 # Try to parse and pretty print if JSON
                 parsed = json.loads(response_content.strip().replace('```json', '').replace('```', ''))
-                logger.info(f"[VLM JSON RESPONSE]")
+                logger.info("[VLM JSON RESPONSE]")
                 logger.info(json.dumps(parsed, indent=2))
-            except:
+            except (json.JSONDecodeError, ValueError, TypeError):
                 # If not JSON, log as is but limit length
-                logger.info(f"[VLM RAW RESPONSE]")
+                logger.info("[VLM RAW RESPONSE]")
                 if len(response_content) > 1000:
                     logger.info(f"{response_content[:1000]}...")
                 else:
@@ -180,7 +178,7 @@ Return the analysis in this EXACT JSON format:"""
             )
             
             # Log detailed calculation comparison
-            logger.info(f"[CALC DETAILED] VLM vs Local comparison:")
+            logger.info("[CALC DETAILED] VLM vs Local comparison:")
             logger.info(f"  Calories: {nutrition_data.total_calories} -> {calculated_totals['total_calories']}")
             logger.info(f"  Protein: {nutrition_data.total_protein}g -> {calculated_totals['total_protein']}g")
             logger.info(f"  Carbs: {nutrition_data.total_carbohydrates}g -> {calculated_totals['total_carbohydrates']}g")
@@ -281,8 +279,6 @@ REMEMBER (numeric only):
     
     def _call_vlm_with_retries(self, messages) -> Optional[any]:
         """Call VLM with retry logic."""
-        last_error = None
-        
         for attempt in range(self.max_retries):
             try:
                 logger.debug(f"VLM attempt {attempt + 1}/{self.max_retries}")
@@ -290,7 +286,6 @@ REMEMBER (numeric only):
                 return response
                 
             except Exception as e:
-                last_error = e
                 logger.warning(f"VLM attempt {attempt + 1} failed: {str(e)}")
                 
                 if attempt == self.max_retries - 1:

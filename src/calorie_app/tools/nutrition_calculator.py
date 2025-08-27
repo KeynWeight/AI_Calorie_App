@@ -1,10 +1,9 @@
 # tools/nutrition_calculator.py
-from typing import Dict, List, Optional
-import re
+from typing import Dict, List
 from decimal import Decimal, ROUND_HALF_UP
 import logging
 
-from ..models.nutrition import Ingredient, DishNutrition
+from ..models.nutrition import Ingredient
 
 logger = logging.getLogger(__name__)
 

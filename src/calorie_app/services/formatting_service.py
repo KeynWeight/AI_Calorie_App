@@ -2,7 +2,6 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
 import logging
-from typing import Optional
 from pathlib import Path
 
 from calorie_app.models.nutrition import DishNutrition
@@ -85,14 +84,14 @@ Make it conversational and informative. Include the confidence information natur
             ]
             
             # Generate response
-            logger.info(f"[LLM] Starting LLM invoke call for response generation")
+            logger.info("[LLM] Starting LLM invoke call for response generation")
             logger.debug(f"[LLM] Messages count: {len(messages)}")
             logger.debug(f"[LLM] System message length: {len(messages[0].content) if messages else 0}")
             logger.debug(f"[LLM] User message length: {len(messages[1].content) if len(messages) > 1 else 0}")
             
             try:
                 response = self.llm.invoke(messages)
-                logger.info(f"[LLM] LLM invoke completed successfully")
+                logger.info("[LLM] LLM invoke completed successfully")
             except Exception as llm_error:
                 logger.error(f"[LLM] LLM invoke failed: {str(llm_error)}")
                 raise

@@ -1,5 +1,5 @@
 # utils/validation.py
-from typing import Dict, List
+from typing import Dict
 import logging
 
 from .config import SystemLimits

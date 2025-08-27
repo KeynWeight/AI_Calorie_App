@@ -1,9 +1,8 @@
 # services/mcp_nutrition_service.py
 import asyncio
 import logging
-import json
 import re
-from typing import Dict, Optional, List, Any, Union
+from typing import Dict, Optional, List, Any
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_core.tools import BaseTool
 
@@ -13,10 +12,8 @@ from calorie_app.utils.llm_cache import cached_agent_response
 
 try:
     from langchain_core.language_models import BaseLanguageModel
-    from langchain_core.prompts import PromptTemplate
     from langchain.agents import create_react_agent, AgentExecutor
     from langchain_core.tools import Tool
-    from langchain_core.runnables import RunnableConfig
     LANGCHAIN_AVAILABLE = True
 except ImportError:
     LANGCHAIN_AVAILABLE = False
@@ -238,7 +235,7 @@ Reasoning: Extracted the essential food item by removing cooking methods and qua
         
         # Rate limiting check
         if not self._check_rate_limit():
-            logger.warning(f"⚠️  Rate limit exceeded, skipping batch LLM matching")
+            logger.warning("⚠️  Rate limit exceeded, skipping batch LLM matching")
             return None
         
         try:
@@ -274,10 +271,10 @@ Return valid JSON only - no explanations."""
             result = await self._run_simple_llm_async(simple_prompt)
             
             if result:
-                logger.info(f"[SUCCESS] Simple LLM completed processing")
+                logger.info("[SUCCESS] Simple LLM completed processing")
                 return result
             
-            logger.warning(f"[FAIL] Simple LLM could not process matching")
+            logger.warning("[FAIL] Simple LLM could not process matching")
             return None
             
         except Exception as e:

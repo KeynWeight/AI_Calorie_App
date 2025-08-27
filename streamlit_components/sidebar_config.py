@@ -220,7 +220,7 @@ def render_advanced_settings():
     
     # Performance settings
     with st.expander("⚡ Performance Settings"):
-        max_retries = st.number_input(
+        st.number_input(
             "Max API Retries",
             min_value=1,
             max_value=5,
@@ -228,7 +228,7 @@ def render_advanced_settings():
             help="Number of retry attempts for failed API calls"
         )
         
-        timeout_seconds = st.number_input(
+        st.number_input(
             "Request Timeout (seconds)",
             min_value=30,
             max_value=180,
@@ -239,14 +239,14 @@ def render_advanced_settings():
     # Logging settings
     with st.expander("📝 Logging Configuration"):
         log_levels = ["DEBUG", "INFO", "WARNING", "ERROR"]
-        log_level = st.selectbox(
+        st.session_state.log_level = st.selectbox(
             "Log Level",
             log_levels,
             index=1,  # Default to INFO
             help="Minimum log level to display"
         )
         
-        log_to_file = st.checkbox(
+        st.session_state.log_to_file = st.checkbox(
             "Save Logs to File",
             value=True,
             help="Save detailed logs to file for debugging"
@@ -254,7 +254,7 @@ def render_advanced_settings():
     
     # Cache settings
     with st.expander("🗂️ Cache Configuration"):
-        cache_size_mb = st.slider(
+        st.session_state.cache_size_mb = st.slider(
             "Max Cache Size (MB)",
             min_value=10,
             max_value=500,
@@ -262,7 +262,7 @@ def render_advanced_settings():
             help="Maximum size of the response cache"
         )
         
-        cache_ttl_hours = st.number_input(
+        st.session_state.cache_ttl_hours = st.number_input(
             "Cache TTL (hours)",
             min_value=1,
             max_value=168,  # 1 week
@@ -282,13 +282,13 @@ def render_advanced_settings():
     
     # Development settings
     with st.expander("🛠️ Development Settings"):
-        dev_mode = st.checkbox(
+        st.session_state.dev_mode = st.checkbox(
             "Development Mode",
             value=False,
             help="Enable development features and verbose logging"
         )
         
-        mock_api_calls = st.checkbox(
+        st.session_state.mock_api_calls = st.checkbox(
             "Mock API Calls",
             value=False,
             help="Use mock responses instead of real API calls (for testing)"

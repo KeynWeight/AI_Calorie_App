@@ -97,6 +97,12 @@ class TestNutritionCalculator:
         # Test internal rounding method
         rounded_value = self.calculator._round_nutrition(10.123456)
         assert rounded_value == 10.12
+        
+        # Test that ingredient values are properly handled
+        totals = self.calculator.calculate_dish_totals([test_ingredient])
+        assert totals['total_carbohydrates'] == 10.12
+        assert totals['total_protein'] == 5.68
+        assert totals['total_fat'] == 3.0
     
     def test_calculator_with_different_precision(self):
         """Test calculator with different precision setting."""

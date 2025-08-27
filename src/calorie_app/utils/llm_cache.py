@@ -197,7 +197,6 @@ class LLMCache:
     def clear_expired(self) -> int:
         """Clear all expired cache entries and return count of removed items."""
         removed_count = 0
-        current_time = time.time()
         
         # Clear expired memory cache items
         expired_keys = []

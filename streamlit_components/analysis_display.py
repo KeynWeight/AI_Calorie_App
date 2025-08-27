@@ -1,7 +1,6 @@
 # streamlit_components/analysis_display.py
 import streamlit as st
 import pandas as pd
-from typing import Optional
 
 def render_analysis_display(analysis, validation_result=None):
     """Render the analysis results display."""
@@ -124,7 +123,7 @@ def render_ingredients_table(ingredients):
     # Display as interactive table
     st.dataframe(
         df,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
         column_config={
             '#': st.column_config.NumberColumn('#', width="small"),
@@ -191,7 +190,6 @@ def render_macro_chart(analysis):
     """Render macronutrient breakdown chart."""
     try:
         import plotly.express as px
-        import plotly.graph_objects as go
         
         # Calculate macro percentages
         total_cal = analysis.total_calories
@@ -215,7 +213,7 @@ def render_macro_chart(analysis):
             fig.update_traces(textposition='inside', textinfo='percent+label')
             fig.update_layout(showlegend=True, height=300)
             
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
             
             # Show percentages
             st.write("**Calorie Distribution:**")
@@ -355,15 +353,12 @@ def render_confidence_info(validation_result):
     # Confidence meter
     confidence = validation_result.confidence_score
     
-    # Color based on confidence
+    # Set status based on confidence
     if confidence >= 0.8:
-        color = "green"
         status = "High"
     elif confidence >= 0.6:
-        color = "orange" 
         status = "Medium"
     else:
-        color = "red"
         status = "Low"
     
     st.metric(

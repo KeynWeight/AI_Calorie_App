@@ -1,7 +1,6 @@
 # services/llm_nutrition_estimator.py
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
-from langchain_core.output_parsers import JsonOutputParser
 import json
 import logging
 from typing import Dict, Optional
@@ -106,8 +105,8 @@ Base your estimate on standard USDA nutrition data. Be as accurate as possible."
                 logger.info(f"[LLM STRUCTURED RESPONSE]   Carbs: {parsed_preview.get('carbohydrates', 'N/A')}g")
                 logger.info(f"[LLM STRUCTURED RESPONSE]   Fat: {parsed_preview.get('fat', 'N/A')}g")
                 logger.info(f"[LLM STRUCTURED RESPONSE]   Sodium: {parsed_preview.get('sodium', 'N/A')}mg")
-            except:
-                logger.debug(f"[LLM RESPONSE] Could not parse JSON preview for {ingredient_name}")
+            except (json.JSONDecodeError, KeyError, TypeError) as e:
+                logger.debug(f"[LLM RESPONSE] Could not parse JSON preview for {ingredient_name}: {e}")
             
             # Log full response to file only for debugging
             from calorie_app.utils.logging_config import standardized_logger

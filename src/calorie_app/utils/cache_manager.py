@@ -1,10 +1,9 @@
 # utils/cache_manager.py
 """Cache management utilities for development work."""
 
-import asyncio
 import logging
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any
 import click
 
 from .llm_cache import llm_cache, agent_cache
@@ -101,6 +100,12 @@ class CacheManager:
         """DEPRECATED: Use log_cache_report() instead."""
         logger.warning("[DEPRECATED] print_cache_report() is deprecated. Use log_cache_report() instead.")
         self.log_cache_report()
+        
+        stats = self.get_all_cache_stats()
+        llm_stats = stats["llm_cache"]
+        agent_stats = stats["agent_cache"]
+        vlm_stats = stats["vlm_cache"]
+        
         print(f"  Disk: {vlm_stats['disk_cache_size']} items")
         print(f"  Max Size: {vlm_stats['max_size']}")
         print(f"  Directory: {vlm_stats['cache_directory']}")
@@ -113,7 +118,7 @@ class CacheManager:
                      agent_stats['disk_cache_size'] + 
                      vlm_stats['disk_cache_size'])
         
-        print(f"\nTotal Cached Items:")
+        print("\nTotal Cached Items:")
         print(f"  Memory: {total_memory}")
         print(f"  Disk: {total_disk}")
         print(f"  Grand Total: {total_memory + total_disk}")

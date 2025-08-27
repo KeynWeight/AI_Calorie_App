@@ -1,7 +1,7 @@
 # tests/test_config.py
 import pytest
 import os
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from calorie_app.utils.config import ModelDefaults
 
 @pytest.mark.unit

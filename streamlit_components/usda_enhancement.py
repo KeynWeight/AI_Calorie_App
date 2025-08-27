@@ -1,7 +1,6 @@
 # streamlit_components/usda_enhancement.py
 import streamlit as st
 import time
-from typing import Optional
 
 def render_usda_interface(mcp_available: bool = False):
     """Render USDA enhancement interface."""
@@ -45,13 +44,13 @@ def render_usda_available_interface():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("✨ Enhance with USDA", type="primary", use_container_width=True):
+        if st.button("✨ Enhance with USDA", type="primary", width="stretch"):
             st.session_state.wants_usda_info = True
             st.session_state.analysis_stage = 'enhancing'
             st.rerun()
     
     with col2:
-        if st.button("➡️ Skip Enhancement", use_container_width=True):
+        if st.button("➡️ Skip Enhancement", width="stretch"):
             st.session_state.wants_usda_info = False
             st.session_state.analysis_stage = 'complete'
             st.rerun()
@@ -111,7 +110,7 @@ def render_usda_unavailable_interface():
     
     # Continue without USDA button
     st.markdown("---")
-    if st.button("➡️ Continue without USDA Enhancement", type="primary", use_container_width=True):
+    if st.button("➡️ Continue without USDA Enhancement", type="primary", width="stretch"):
         st.session_state.wants_usda_info = False
         st.session_state.analysis_stage = 'complete'
         st.rerun()

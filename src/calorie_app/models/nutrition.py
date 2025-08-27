@@ -1,8 +1,7 @@
 # models/nutrition.py
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any, Union
+from typing import List, Optional, Dict, Any
 from enum import Enum
-import json
 
 from ..utils.config import USDANutrientIDs
 

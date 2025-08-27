@@ -10,7 +10,7 @@ def render_results_dashboard(analysis):
         st.error("No analysis data to display")
         return
     
-    print(f"\n=== RESULTS DASHBOARD DATA ===")
+    print("\n=== RESULTS DASHBOARD DATA ===")
     print(f"Analysis type: {type(analysis)}")
     print(f"Dish name: {analysis.dish_name}")
     print(f"Total calories: {analysis.total_calories}")
@@ -23,7 +23,7 @@ def render_results_dashboard(analysis):
     print(f"Sugar: {getattr(analysis, 'total_sugar', 'N/A')}")
     for i, ing in enumerate(analysis.ingredients):
         print(f"  Ingredient {i+1}: {ing.ingredient} - {ing.calories}cal, {ing.protein}g protein, {ing.carbohydrates}g carbs, {ing.fat}g fat")
-    print(f"=== END DASHBOARD DATA ===\n")
+    print("=== END DASHBOARD DATA ===\n")
     
     # Hero section
     render_hero_section(analysis)
@@ -143,9 +143,7 @@ def render_micronutrients_section(analysis):
         st.info("💡 Micronutrient data available after USDA enhancement")
         return
     
-    # Aggregate micronutrients from all enhanced ingredients
-    all_nutrients = {}
-    
+    # Display micronutrients from all enhanced ingredients
     for ingredient in enhanced_ingredients:
         if ingredient.complete_nutrition:
             st.markdown(f"#### {ingredient.ingredient}")
@@ -246,7 +244,7 @@ def render_overview_tab(analysis):
             carb_pct = (analysis.total_carbohydrates * 4) / total_cal * 100
             fat_pct = (analysis.total_fat * 9) / total_cal * 100
             
-            st.write(f"**Macronutrient Distribution:**")
+            st.write("**Macronutrient Distribution:**")
             st.write(f"• Protein: {protein_pct:.0f}%")
             st.write(f"• Carbs: {carb_pct:.0f}%")
             st.write(f"• Fat: {fat_pct:.0f}%")
@@ -287,7 +285,7 @@ def render_ingredients_tab(analysis):
     # Display interactive table
     st.dataframe(
         df,
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
         column_config={
             'Rank': st.column_config.NumberColumn('Rank', width="small"),
@@ -365,7 +363,7 @@ def render_macro_pie_chart(analysis):
         
         fig.update_layout(showlegend=True, height=500)
         
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         
     except ImportError:
         st.warning("📊 Install plotly to see interactive charts: `pip install plotly`")
@@ -392,7 +390,7 @@ def render_calorie_distribution_chart(analysis):
         
         fig.update_layout(height=max(400, len(ingredients) * 40))
         
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         
     except ImportError:
         # Fallback to simple bar chart
@@ -494,7 +492,7 @@ def render_export_options(analysis):
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        if st.button("📄 Download PDF Report", use_container_width=True):
+        if st.button("📄 Download PDF Report", width="stretch"):
             pdf_data = generate_pdf_report(analysis)
             if pdf_data:
                 st.download_button(
@@ -513,7 +511,7 @@ def render_export_options(analysis):
             data=csv_data,
             file_name=f"nutrition_data_{analysis.dish_name.lower().replace(' ', '_')}.csv",
             mime="text/csv",
-            use_container_width=True
+            width="stretch"
         )
     
     with col3:
@@ -523,11 +521,11 @@ def render_export_options(analysis):
             data=json_data,
             file_name=f"nutrition_analysis_{analysis.dish_name.lower().replace(' ', '_')}.json",
             mime="application/json",
-            use_container_width=True
+            width="stretch"
         )
     
     with col4:
-        if st.button("📱 Share Results", use_container_width=True):
+        if st.button("📱 Share Results", width="stretch"):
             render_share_options(analysis)
 
 def generate_nutritional_highlights(analysis) -> list:

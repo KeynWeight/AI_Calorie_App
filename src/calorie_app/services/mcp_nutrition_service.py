@@ -962,7 +962,7 @@ class MCPNutritionService:
 
             def _sync_request():
                 try:
-                    with urllib.request.urlopen(full_url) as response:
+                    with urllib.request.urlopen(full_url) as response:  # nosec B310 - USDA API trusted source
                         if response.status == 200:
                             data = json.loads(response.read().decode())
                             logger.info(

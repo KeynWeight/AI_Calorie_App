@@ -1,7 +1,7 @@
 # utils/llm_cache.py
 import hashlib
 import json
-import pickle
+import pickle  # nosec B403 - Safe for local caching only
 import time
 import asyncio
 import inspect
@@ -109,7 +109,7 @@ class LLMCache:
         if cache_file.exists():
             try:
                 with open(cache_file, "rb") as f:
-                    cached_item = pickle.load(f)
+                    cached_item = pickle.load(f)  # nosec B301 - Safe for local cache files
 
                     if self._is_cache_valid(cached_item["timestamp"]):
                         # Store in memory for faster access
@@ -138,7 +138,7 @@ class LLMCache:
                 return False
 
             # Try a test pickle to see if it's serializable
-            pickle.dumps(response)
+            pickle.dumps(response)  # nosec B301 - Safe for serialization test
             return True
         except (TypeError, pickle.PicklingError):
             return False
@@ -183,7 +183,7 @@ class LLMCache:
         cache_file = self.cache_dir / f"llm_{cache_key}.pkl"
         try:
             with open(cache_file, "wb") as f:
-                pickle.dump(cached_item, f)
+                pickle.dump(cached_item, f)  # nosec B301 - Safe for local cache files
             logger.debug(f"Cached LLM response: {cache_key} (model: {model})")
         except Exception as e:
             logger.warning(f"Failed to cache LLM response {cache_key}: {e}")
@@ -230,7 +230,7 @@ class LLMCache:
         for cache_file in self.cache_dir.glob("llm_*.pkl"):
             try:
                 with open(cache_file, "rb") as f:
-                    cached_item = pickle.load(f)
+                    cached_item = pickle.load(f)  # nosec B301 - Safe for local cache files
                     if not self._is_cache_valid(cached_item["timestamp"]):
                         cache_file.unlink()
                         removed_count += 1

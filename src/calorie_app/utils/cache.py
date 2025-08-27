@@ -1,6 +1,6 @@
 # utils/cache.py
 import hashlib
-import pickle
+import pickle  # nosec B403 - Safe for local caching only
 from functools import wraps
 from pathlib import Path
 from typing import Any, Optional, Callable
@@ -54,7 +54,7 @@ class VLMCache:
         if cache_file.exists():
             try:
                 with open(cache_file, "rb") as f:
-                    data = pickle.load(f)
+                    data = pickle.load(f)  # nosec B301 - Safe for local cache files
                     # Store in memory for faster access
                     self.memory_cache[cache_key] = data
                     logger.debug(f"[CHE] Disk hit: {cache_key[:16]}...")
@@ -76,7 +76,7 @@ class VLMCache:
         cache_file = self.cache_dir / f"{cache_key}.pkl"
         try:
             with open(cache_file, "wb") as f:
-                pickle.dump(data, f)
+                pickle.dump(data, f)  # nosec B301 - Safe for local cache files
             logger.debug(f"[CHE] Stored: {cache_key[:16]}...")
         except Exception as e:
             logger.warning(f"[CHE] Store failed: {e}")

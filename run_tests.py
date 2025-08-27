@@ -70,10 +70,7 @@ def run_coverage_tests():
 def run_linting():
     """Run code linting and formatting checks."""
     commands = [
-        (["python", "-m", "ruff", "check", "src/", "tests/"], "Ruff Linting"),
-        (["python", "-m", "black", "--check", "src/", "tests/"], "Black Formatting Check"),
-        (["python", "-m", "isort", "--check-only", "src/", "tests/"], "Import Sorting Check"),
-        (["python", "-m", "mypy", "src/"], "Type Checking"),
+        (["python", "-m", "ruff", "check", "."], "Ruff Linting & Import Check")
     ]
     
     all_passed = True

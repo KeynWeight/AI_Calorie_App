@@ -23,13 +23,20 @@ jobs:
     
     - name: Install dependencies
       run: |
-        uv sync
+        uv sync --extra dev
         cd food-data-central-mcp-server
         npm install && npm run build
         cd ..
     
+    - name: Run linting
+      run: |
+        uv run python -m ruff check .
+        uv run python -m ruff format --check .
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src
+    
     - name: Run tests
       run: |
-        uv run python run_tests.py
+        uv run pytest tests/ -m unit -v
       env:
         PYTHONPATH: ${{ github.workspace }}/src

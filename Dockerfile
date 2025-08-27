@@ -22,15 +22,25 @@ ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
 WORKDIR /app
 
-# Install minimal system dependencies
-RUN apt-get update --fix-missing && apt-get install -y --no-install-recommends \
+# Install system dependencies needed for Python packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    build-essential \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python requirements and install
+# Install pip and upgrade setuptools first
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Copy Python requirements and install with verbose output
 COPY pyproject.toml .
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir --verbose . || (echo "Install failed, checking logs..." && pip install --no-cache-dir --verbose . 2>&1)
 
 # Copy built MCP server from node stage
 COPY --from=node-builder /app/food-data-central-mcp-server/dist ./food-data-central-mcp-server/dist

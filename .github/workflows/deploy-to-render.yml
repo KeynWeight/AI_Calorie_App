@@ -27,5 +27,5 @@ jobs:
     - name: Deployment Status
       run: |
         echo "🚀 Deployment triggered successfully!"
-        echo "📱 Your app will be available at: https://your-app-name.onrender.com"
+        echo "📱 Your app will be available at: https://ai-calorie-app-agvf.onrender.com"
         echo "⏱️ Deployment usually takes 2-3 minutes"

@@ -1,5 +1,8 @@
-# Use Python 3.13 slim image
+# Use Python 3.13 slim image  
 FROM python:3.13-slim
+
+# Set environment variables to avoid interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Set working directory
 WORKDIR /app
@@ -16,7 +19,10 @@ RUN apt-get update --fix-missing && apt-get install -y --no-install-recommends \
 
 # Install Node.js 20.x for MCP server
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
+    && apt-get update \
+    && apt-get install -y --no-install-recommends nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy Python requirements first for better Docker layer caching
 COPY pyproject.toml .

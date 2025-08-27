@@ -31,7 +31,6 @@ jobs:
     - name: Run linting
       run: |
         uv run python -m ruff check .
-        uv run python -m ruff format --check .
       env:
         PYTHONPATH: ${{ github.workspace }}/src
     

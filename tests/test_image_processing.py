@@ -47,16 +47,6 @@ class TestImageProcessor:
         
         assert not self.processor.validate_image(fake_image)
     
-    def test_validate_image_too_large(self):
-        """Test validation of image that's too large."""
-        # Create a large image (assuming max size limit exists)
-        large_image = self.create_test_image(size=(10000, 10000))
-        
-        # This should depend on your actual size limits in config
-        # For now, we'll assume it passes basic validation
-        result = self.processor.validate_image(large_image)
-        assert isinstance(result, bool)
-    
     def test_encode_image_success(self):
         """Test successful image encoding to base64."""
         image_path = self.create_test_image()

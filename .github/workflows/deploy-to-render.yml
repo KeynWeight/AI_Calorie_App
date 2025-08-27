@@ -3,6 +3,11 @@ name: Deploy to Render
 on:
   push:
     branches: [ master, main ]
+    paths:
+      - 'src/**'
+      - 'streamlit_components/**'
+      - 'app.py'
+      - 'Dockerfile'
   workflow_dispatch: # Allow manual deployment
 
 jobs:
@@ -22,7 +27,6 @@ jobs:
       with:
         service-id: ${{ secrets.RENDER_SERVICE_ID }}
         api-key: ${{ secrets.RENDER_API_KEY }}
-        wait-for-success: true
 
     - name: Deployment Status
       run: |

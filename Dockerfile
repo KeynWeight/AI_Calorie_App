@@ -37,6 +37,7 @@ COPY . .
 
 # Copy built MCP server from node stage (overwrite the copied version)
 COPY --from=node-builder /app/food-data-central-mcp-server/dist ./food-data-central-mcp-server/dist
+COPY --from=node-builder /app/food-data-central-mcp-server/node_modules ./food-data-central-mcp-server/node_modules
 COPY --from=node-builder /app/food-data-central-mcp-server/package.json ./food-data-central-mcp-server/
 
 # Install Python package after copying source code

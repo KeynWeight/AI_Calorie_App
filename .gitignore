@@ -21,6 +21,11 @@ wheels/
 *.egg
 MANIFEST
 
+# Testing
+.pytest_cache/
+.tox/
+.nox/
+
 # Virtual environments
 .env
 .venv
@@ -75,7 +80,23 @@ assets/*.jpeg
 .ruff_cache/
 .cache/
 temp_uploads/
+*.uuid
+*_opt.jpg
+*_opt.png
+
+# Coverage reports
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
 
 # claude files
 .claude/
 Claude.md
+
+# Package manager files
+uv.lock

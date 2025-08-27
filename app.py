@@ -55,6 +55,10 @@ def setup_workflow():
             "llm_base_url": os.getenv("OPENROUTER_API_URL"),
         }
 
+        # Quick validation - fail fast if essential keys missing
+        if not config["vision_api_key"] or not config["llm_api_key"]:
+            raise ValueError("Missing required OpenRouter API key. Please set it in the sidebar or environment variables.")
+
         # Setup MCP config for USDA if available
         mcp_config = None
         usda_api_key = st.session_state.get("usda_key") or os.getenv("USDA_API_KEY")
@@ -137,8 +141,10 @@ def main():
 
     # Setup workflow if not already done
     if "workflow_obj" not in st.session_state or st.session_state.workflow_obj is None:
-        workflow = setup_workflow()
+        with st.spinner("🚀 Initializing AI Nutrition Analyzer..."):
+            workflow = setup_workflow()
         if not workflow:
+            st.error("Failed to initialize the application. Please check your configuration.")
             st.stop()
     else:
         workflow = st.session_state.workflow_obj
@@ -294,12 +300,18 @@ def render_modification_stage():
     analysis = st.session_state.get("original_analysis")
     modifications = render_modification_interface(analysis)
 
+    # Store modifications in session state so they persist between renders
+    if modifications is not None:
+        st.session_state.current_modifications = modifications
+
     # Action buttons
     col1, col2 = st.columns(2)
 
     with col1:
         if st.button("💾 Apply Changes", type="primary", width="stretch"):
-            submit_validation(approved=True, modifications=modifications)
+            # Use modifications from session state if available, otherwise current modifications
+            final_modifications = st.session_state.get("current_modifications", modifications)
+            submit_validation(approved=True, modifications=final_modifications)
 
     with col2:
         if st.button("↩️ Back to Review", width="stretch"):

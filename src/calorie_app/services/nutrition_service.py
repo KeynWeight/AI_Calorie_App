@@ -1090,11 +1090,12 @@ Format: KEYWORDS: keyword1, keyword2, keyword3, ..."""
         return keywords
 
     async def _get_llm_response(self, prompt: str) -> str:
-        """Get response from LLM for keyword extraction."""
+        """Get response from LLM for keyword extraction with timeout."""
         try:
             # Create direct LLM instance for keyword extraction
             from langchain_openai import ChatOpenAI
             from langchain_core.messages import HumanMessage
+            import asyncio
 
             llm = ChatOpenAI(
                 model=self.llm_model,
@@ -1102,14 +1103,24 @@ Format: KEYWORDS: keyword1, keyword2, keyword3, ..."""
                 base_url=self.llm_base_url,
                 temperature=0.1,  # Low temperature for consistent extraction
                 max_tokens=200,  # Short response needed
+                timeout=30,  # 30 second timeout for API calls
+                max_retries=2,  # Retry failed requests
             )
 
-            # Get response
+            # Get response with timeout
             messages = [HumanMessage(content=prompt)]
-            response = await llm.ainvoke(messages)
+
+            # Add asyncio timeout as additional safety
+            response = await asyncio.wait_for(
+                llm.ainvoke(messages),
+                timeout=45  # 45 second total timeout (includes retries)
+            )
 
             return response.content if hasattr(response, "content") else str(response)
 
+        except asyncio.TimeoutError:
+            logger.error("LLM response timed out after 45 seconds")
+            return ""
         except Exception as e:
             logger.error(f"Error getting LLM response for keyword extraction: {str(e)}")
             return ""

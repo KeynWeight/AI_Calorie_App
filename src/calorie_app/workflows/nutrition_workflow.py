@@ -387,50 +387,57 @@ class NutritionWorkflow:
                     "error_message": "No analysis available for USDA enhancement",
                 }
 
-            # Use AI agent to match ingredients with USDA database
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            logger.info(
+                f"AI Agent: Matching {len(current_analysis.ingredients)} ingredients"
+            )
+
+            # Use AI agent to match ingredients with USDA database - run async in sync context with timeout
+            import asyncio
+
+            async def run_usda_matching():
+                return await self.nutrition_service.match_ingredients_with_usda_efficient(
+                    current_analysis.ingredients,
+                    dish_context=current_analysis.dish_name,
+                )
+
+            # Run with timeout protection
             try:
-                logger.info(
-                    f"AI Agent: Matching {len(current_analysis.ingredients)} ingredients"
+                enhanced_ingredients = asyncio.run(
+                    asyncio.wait_for(run_usda_matching(), timeout=120)  # 2 minute timeout
                 )
-
-                enhanced_ingredients = loop.run_until_complete(
-                    self.nutrition_service.match_ingredients_with_usda_efficient(
-                        current_analysis.ingredients,
-                        dish_context=current_analysis.dish_name,
-                    )
-                )
-
-                # Create enhanced analysis with USDA-matched ingredients
-                enhanced_analysis = current_analysis.model_copy(deep=True)
-                enhanced_analysis.ingredients = enhanced_ingredients
-
-                # Recalculate totals with enhanced data
-                enhanced_analysis.calculate_totals()
-
-                # Count successful matches
-                usda_matches = sum(
-                    1
-                    for ing in enhanced_ingredients
-                    if hasattr(ing, "complete_nutrition") and ing.complete_nutrition
-                )
-
-                logger.info(
-                    f"AI Agent: USDA matching complete - {usda_matches}/{len(enhanced_ingredients)} ingredients enhanced"
-                )
-
+            except asyncio.TimeoutError:
+                logger.error("USDA matching timed out after 2 minutes")
                 return {
-                    "final_analysis": enhanced_analysis,
-                    "usda_enhanced_analysis": enhanced_analysis,
-                    "usda_matches_count": usda_matches,
-                    "total_ingredients": len(enhanced_ingredients),
-                    "usda_query_handled": True,
-                    "usda_enhancement_summary": f"Enhanced {usda_matches} of {len(enhanced_ingredients)} ingredients with USDA data using AI agent",
+                    "usda_query_handled": False,
+                    "error_message": "USDA matching timed out after 2 minutes",
                 }
 
-            finally:
-                loop.close()
+            # Create enhanced analysis with USDA-matched ingredients
+            enhanced_analysis = current_analysis.model_copy(deep=True)
+            enhanced_analysis.ingredients = enhanced_ingredients
+
+            # Recalculate totals with enhanced data
+            enhanced_analysis.calculate_totals()
+
+            # Count successful matches
+            usda_matches = sum(
+                1
+                for ing in enhanced_ingredients
+                if hasattr(ing, "complete_nutrition") and ing.complete_nutrition
+            )
+
+            logger.info(
+                f"AI Agent: USDA matching complete - {usda_matches}/{len(enhanced_ingredients)} ingredients enhanced"
+            )
+
+            return {
+                "final_analysis": enhanced_analysis,
+                "usda_enhanced_analysis": enhanced_analysis,
+                "usda_matches_count": usda_matches,
+                "total_ingredients": len(enhanced_ingredients),
+                "usda_query_handled": True,
+                "usda_enhancement_summary": f"Enhanced {usda_matches} of {len(enhanced_ingredients)} ingredients with USDA data using AI agent",
+            }
 
         except Exception as e:
             logger.error(f"💥 AI Agent USDA query error: {str(e)}")

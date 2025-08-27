@@ -57,6 +57,7 @@ def reset_analysis():
         "wants_usda_info",
         "usda_matches",
         "modifications",
+        "current_modifications",  # Clear current modifications
     ]
 
     # Reset analysis state
